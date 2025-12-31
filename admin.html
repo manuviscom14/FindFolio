@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Admin - Add Business</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>📒 FindFolio - Admin</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Back to Home</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Admin Form -->
+    <main class="admin-main">
+        <div class="container">
+            <div class="admin-form-wrapper">
+                <h2>Add New Business</h2>
+                <form id="businessForm">
+                    <div class="form-group">
+                        <label for="businessName">Business Name *</label>
+                        <input type="text" id="businessName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category *</label>
+                        <input type="text" id="category" placeholder="e.g., Restaurant, Retail, Services" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Location *</label>
+                        <input type="text" id="location" placeholder="City, State" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" placeholder="+1-234-567-8900" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="imageUrl">Business Image URL *</label>
+                        <input type="url" id="imageUrl" placeholder="https://example.com/image.jpg" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="summary">Business Summary *</label>
+                        <textarea id="summary" rows="3" placeholder="Brief description of the business" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="services">Services Offered *</label>
+                        <textarea id="services" rows="4" placeholder="Enter services separated by commas (e.g., Service 1, Service 2, Service 3)" required></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">Add Business</button>
+                        <button type="reset" class="btn-reset">Clear Form</button>
+                    </div>
+                </form>
+
+                <div id="formMessage" class="form-message"></div>
+            </div>
+
+            <!-- Recent Businesses -->
+            <div class="recent-businesses">
+                <h3>Recent Additions</h3>
+                <div id="recentList" class="recent-list">
+                    <!-- Recent businesses will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-logo">
+                <h3>📒 FindFolio</h3>
+            </div>
+            <p>&#169; 2026 FindFolio Directory. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="admin.js"></script>
+</body>
+</html>
