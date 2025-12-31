@@ -19,7 +19,7 @@ function setupForm() {
     });
 }
 
-// Add new business
+// Add new business with sequential ID
 async function addBusiness() {
     const formMessage = document.getElementById('formMessage');
     
@@ -30,7 +30,7 @@ async function addBusiness() {
         formMessage.style.backgroundColor = '#fff3cd';
         formMessage.style.color = '#856404';
         
-        // Fetch current data
+        // Fetch current data first
         const getResponse = await fetch(JSONBIN_URL, {
             headers: {
                 'X-Master-Key': API_KEY
@@ -44,31 +44,29 @@ async function addBusiness() {
         const currentData = await getResponse.json();
         let businesses = currentData.record.businesses || [];
         
-        // Generate next sequential ID
-        let nextId = 1;
+        // Calculate next sequential ID
+        let nextId = 51; // Start from 51 if no businesses exist
+        
         if (businesses.length > 0) {
-            // Find the highest ID and add 1
-            const maxId = Math.max(...businesses.map(b => parseInt(b.id) || 0));
-            nextId = maxId + 1;
+            // Get all numeric IDs and find the maximum
+            const numericIds = businesses
+                .map(b => parseInt(b.id))
+                .filter(id => !isNaN(id));
+            
+            if (numericIds.length > 0) {
+                nextId = Math.max(...numericIds) + 1;
+            }
         }
         
-        // Get form data
-        const businessData = {
-            id: nextId.toString(),
-            name: document.getElementById('businessName').value.trim(),
-            category: document.getElementById('category').value.trim(),
-            location: document.getElementById('location').value.trim(),
-            phone: document.getElementById('phone').value.trim(),
-            email: document.getElementById('email').value.trim(),
-            imageUrl: document.getElementById('imageUrl').value.trim(),
-            summary: document.getElementById('summary').value.trim(),
-            services: document.getElementById('services').value.trim(),
-            dateAdded: new Date().toISOString()
-        };
+        console.log('Next ID will be:', nextId); // Debug log
         
-        // Check for duplicate business name
+        // Get form data
+        const newBusinessName = document.getElementById('businessName').value.trim();
+        const newBusinessEmail = document.getElementById('email').value.trim();
+        
+        // Check for duplicates
         const duplicateName = businesses.find(b => 
-            b.name.toLowerCase() === businessData.name.toLowerCase()
+            b.name.toLowerCase() === newBusinessName.toLowerCase()
         );
         
         if (duplicateName) {
@@ -77,32 +75,64 @@ async function addBusiness() {
             return;
         }
         
-        // Add new business
+        const duplicateEmail = businesses.find(b => 
+            b.email.toLowerCase() === newBusinessEmail.toLowerCase()
+        );
+        
+        if (duplicateEmail) {
+            formMessage.textContent = '⚠️ A business with this email already exists!';
+            formMessage.className = 'form-message error';
+            return;
+        }
+        
+        // Create new business object
+        const businessData = {
+            id: nextId.toString(),
+            name: newBusinessName,
+            category: document.getElementById('category').value.trim(),
+            location: document.getElementById('location').value.trim(),
+            phone: document.getElementById('phone').value.trim(),
+            email: newBusinessEmail,
+            imageUrl: document.getElementById('imageUrl').value.trim(),
+            summary: document.getElementById('summary').value.trim(),
+            services: document.getElementById('services').value.trim(),
+            dateAdded: new Date().toISOString()
+        };
+        
+        console.log('Adding business:', businessData); // Debug log
+        
+        // Add new business to array
         businesses.push(businessData);
         
-        // Update JSONBin
+        // Update JSONBin with new data
         const updateResponse = await fetch(JSONBIN_URL, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'X-Master-Key': API_KEY
             },
-            body: JSON.stringify({ businesses })
+            body: JSON.stringify({ businesses: businesses })
         });
         
         if (!updateResponse.ok) {
-            throw new Error('Failed to save data');
+            const errorData = await updateResponse.text();
+            console.error('Update failed:', errorData);
+            throw new Error('Failed to save data to JSONBin');
         }
         
-        // Success
-        formMessage.textContent = `✓ Business added successfully with ID: ${nextId}!`;
+        console.log('Business added successfully with ID:', nextId); // Debug log
+        
+        // Success message
+        formMessage.textContent = `✓ Business "${newBusinessName}" added successfully with ID: ${nextId}!`;
         formMessage.className = 'form-message success';
         
         // Reset form
         document.getElementById('businessForm').reset();
         
         // Reload recent businesses
-        loadRecentBusinesses();
+        setTimeout(() => {
+            loadRecentBusinesses();
+        }, 500);
         
         // Hide message after 5 seconds
         setTimeout(() => {
@@ -111,7 +141,7 @@ async function addBusiness() {
         
     } catch (error) {
         console.error('Error adding business:', error);
-        formMessage.textContent = '✗ Error adding business. Please try again.';
+        formMessage.textContent = `✗ Error: ${error.message}. Please check console for details.`;
         formMessage.className = 'form-message error';
     }
 }
@@ -134,8 +164,8 @@ async function loadRecentBusinesses() {
         const data = await response.json();
         const businesses = data.record.businesses || [];
         
-        // Get last 5 businesses
-        const recentBusinesses = businesses.slice(-5).reverse();
+        // Get last 10 businesses
+        const recentBusinesses = businesses.slice(-10).reverse();
         
         if (recentBusinesses.length === 0) {
             recentList.innerHTML = '<p>No businesses added yet.</p>';
@@ -144,13 +174,13 @@ async function loadRecentBusinesses() {
         
         recentList.innerHTML = recentBusinesses.map(business => `
             <div class="recent-item">
-                <h4>${business.name}</h4>
+                <h4>${business.name} <span style="color: var(--primary-color); font-size: 0.9rem;">(ID: ${business.id})</span></h4>
                 <p>${business.category} • ${business.location}</p>
             </div>
         `).join('');
         
     } catch (error) {
         console.error('Error loading recent businesses:', error);
-        recentList.innerHTML = '<p style="color: red;">Error loading recent businesses.</p>';
+        recentList.innerHTML = '<p style="color: red;">Error loading recent businesses. Check console for details.</p>';
     }
 }
