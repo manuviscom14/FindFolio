@@ -23,20 +23,6 @@ function setupForm() {
 async function addBusiness() {
     const formMessage = document.getElementById('formMessage');
     
-    // Get form data
-    const businessData = {
-        id: Date.now().toString(),
-        name: document.getElementById('businessName').value.trim(),
-        category: document.getElementById('category').value.trim(),
-        location: document.getElementById('location').value.trim(),
-        phone: document.getElementById('phone').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        imageUrl: document.getElementById('imageUrl').value.trim(),
-        summary: document.getElementById('summary').value.trim(),
-        services: document.getElementById('services').value.trim(),
-        dateAdded: new Date().toISOString()
-    };
-    
     try {
         formMessage.textContent = 'Adding business...';
         formMessage.className = 'form-message';
@@ -58,6 +44,39 @@ async function addBusiness() {
         const currentData = await getResponse.json();
         let businesses = currentData.record.businesses || [];
         
+        // Generate next sequential ID
+        let nextId = 1;
+        if (businesses.length > 0) {
+            // Find the highest ID and add 1
+            const maxId = Math.max(...businesses.map(b => parseInt(b.id) || 0));
+            nextId = maxId + 1;
+        }
+        
+        // Get form data
+        const businessData = {
+            id: nextId.toString(),
+            name: document.getElementById('businessName').value.trim(),
+            category: document.getElementById('category').value.trim(),
+            location: document.getElementById('location').value.trim(),
+            phone: document.getElementById('phone').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            imageUrl: document.getElementById('imageUrl').value.trim(),
+            summary: document.getElementById('summary').value.trim(),
+            services: document.getElementById('services').value.trim(),
+            dateAdded: new Date().toISOString()
+        };
+        
+        // Check for duplicate business name
+        const duplicateName = businesses.find(b => 
+            b.name.toLowerCase() === businessData.name.toLowerCase()
+        );
+        
+        if (duplicateName) {
+            formMessage.textContent = '⚠️ A business with this name already exists!';
+            formMessage.className = 'form-message error';
+            return;
+        }
+        
         // Add new business
         businesses.push(businessData);
         
@@ -76,7 +95,7 @@ async function addBusiness() {
         }
         
         // Success
-        formMessage.textContent = '✓ Business added successfully!';
+        formMessage.textContent = `✓ Business added successfully with ID: ${nextId}!`;
         formMessage.className = 'form-message success';
         
         // Reset form
@@ -85,10 +104,10 @@ async function addBusiness() {
         // Reload recent businesses
         loadRecentBusinesses();
         
-        // Hide message after 3 seconds
+        // Hide message after 5 seconds
         setTimeout(() => {
             formMessage.style.display = 'none';
-        }, 3000);
+        }, 5000);
         
     } catch (error) {
         console.error('Error adding business:', error);
