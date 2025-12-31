@@ -1,6 +1,6 @@
 // JSONBin Configuration - REPLACE WITH YOUR CREDENTIALS
-const API_KEY = 'YOUR_JSONBIN_API_KEY';
-const BIN_ID = 'YOUR_BIN_ID';
+const API_KEY = '$2a$10$x0pRgz7JdnrudcoVXWy.5uMUWWVTAtXWHVvr/PZnYR9p.ctZhQZsy';
+const BIN_ID = '69552d0843b1c97be9109409';
 const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
 let allBusinesses = [];
