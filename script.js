@@ -9,71 +9,7 @@ let searchTerm = '';
 let selectedCategory = '';
 let selectedLocation = '';
 
-// Fallback dummy data (will be used if API fails)
-const FALLBACK_DATA = {
-    "businesses": [
-        {
-            "id": "1",
-            "name": "Ace Hardware Store",
-            "category": "Hardware & Tools",
-            "location": "Downtown, New York",
-            "phone": "+1-212-555-0101",
-            "email": "contact@acehardware.com",
-            "imageUrl": "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=800",
-            "summary": "Your one-stop shop for all hardware needs. We offer a wide range of tools, building materials, and expert advice for your home improvement projects.",
-            "services": "Power Tools, Hand Tools, Paint Supplies, Plumbing Materials, Electrical Supplies, Garden Equipment",
-            "dateAdded": "2024-01-15T10:00:00Z"
-        },
-        {
-            "id": "2",
-            "name": "Artisan Bakery & Cafe",
-            "category": "Bakery & Cafe",
-            "location": "Brooklyn, New York",
-            "phone": "+1-212-555-0102",
-            "email": "hello@artisanbakery.com",
-            "imageUrl": "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=800",
-            "summary": "Freshly baked goods made with love every morning. From artisan breads to delicious pastries, we bring European baking traditions to your neighborhood.",
-            "services": "Fresh Bread, Pastries, Custom Cakes, Coffee & Espresso, Sandwiches, Catering Services",
-            "dateAdded": "2024-01-16T09:00:00Z"
-        },
-        {
-            "id": "3",
-            "name": "Alpine Auto Repair Alpine Auto Repair",
-            "category": "Auto Services",
-            "location": "Queens, New York",
-            "phone": "+1-212-555-0103",
-            "email": "service@alpineauto.com",
-            "imageUrl": "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800",
-            "summary": "Expert auto repair and maintenance services. Our certified technicians provide quality service for all makes and models with a satisfaction guarantee.",
-            "services": "Oil Changes, Brake Service, Engine Diagnostics, Tire Rotation, AC Repair, Transmission Service",
-            "dateAdded": "2024-01-17T11:00:00Z"
-        },
-        {
-            "id": "4",
-            "name": "Apex Accounting Solutions",
-            "category": "Professional Services",
-            "location": "Manhattan, New York",
-            "phone": "+1-212-555-0104",
-            "email": "info@apexaccounting.com",
-            "imageUrl": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800",
-            "summary": "Professional accounting and tax services for individuals and businesses. We help you navigate complex financial matters with expertise and integrity.",
-            "services": "Tax Preparation, Bookkeeping, Financial Planning, Payroll Services, Business Consulting, Audit Support",
-            "dateAdded": "2024-01-18T14:00:00Z"
-        },
-        {
-            "id": "5",
-            "name": "Bella Vista Restaurant",
-            "category": "Italian Restaurant",
-            "location": "Little Italy, New York",
-            "phone": "+1-212-555-0105",
-            "email": "reservations@bellavista.com",
-            "imageUrl": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800",
-            "summary": "Authentic Italian cuisine in an elegant setting. Experience the flavors of Italy with our chef's signature dishes and extensive wine selection.",
-            "services": "Fine Dining, Private Events, Catering, Wine Pairing, Outdoor Seating, Takeout Available",
-            "dateAdded": "2024-01-19T12:00:00Z"
-        }
-    ]
-};
+
 
 // ============================================
 // INITIALIZATION
